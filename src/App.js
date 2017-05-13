@@ -5,25 +5,33 @@ import "./App.css";
 // import "bootswatch/superhero/bootstrap.css";
 import "bootswatch/simplex/bootstrap.css";
 
-import { Navbar, NavItem, Nav, Grid, Row, Col } from "react-bootstrap";
+import {Col, Grid, Nav, Navbar, NavItem, Row} from "react-bootstrap";
 
-const PLACES = [
+const PLACES_TR = [
     {
-        name: "Palo Alto",
-        zip: "94303"
-    }, {
-        name: "San Jose",
-        zip: "94088"
-    }, {
-        name: "Santa Cruz",
-        zip: "95062"
-    }, {
-        name: "Honolulu",
-        zip: "96803"
-    }
+        name: "Ankara",
+        country: "tr"
+    },
+    {
+        name: "Istanbul",
+        country: "tr"
+    },
+    {
+        name: "Adana",
+        country: "tr"
+    },
+    {
+        name: "Mersin",
+        country: "tr"
+    },
+    {
+        name: "Duzce",
+        country: "tr"
+    },
 ];
 
 class WeatherDisplay extends Component {
+
     constructor() {
         super();
         this.state = {
@@ -32,11 +40,17 @@ class WeatherDisplay extends Component {
     }
 
     componentDidMount() {
-        const zip = this.props.zip;
-        const URL = "http://api.openweathermap.org/data/2.5/weather?q="
-            + zip
-            + "&appid=b1b35bba8b434a28a0be2a3e1071ae5b"
-            + "&units=metric";
+        let buildURLWithNameAndCountryCode = function (city, countryCode) {
+            return "http://api.openweathermap.org/data/2.5/weather?q="
+                + city
+                + ","
+                + countryCode
+                + "&appid=b1b35bba8b434a28a0be2a3e1071ae5b"
+                + "&units=metric";
+        };
+
+        const URL = buildURLWithNameAndCountryCode(this.props.cityName, this.props.countryCode);
+
         fetch(URL)
             .then(res => res.json())
             .then(json => {
@@ -97,13 +111,18 @@ class App extends Component {
                                     this.setState({activePlace: index});
                                 }}
                             >
-                                {PLACES.map((place, index) => (
-                                    <NavItem key={index} eventKey={index}>{place.name}</NavItem>
-                                ))}
+                                {
+                                    PLACES_TR.map((place, index) => (
+                                        <NavItem key={index} eventKey={index}>{place.name}</NavItem>
+                                    ))
+                                }
                             </Nav>
                         </Col>
                         <Col md={8} sm={8}>
-                            <WeatherDisplay key={activePlace} zip={PLACES[activePlace].zip}/>
+                            <WeatherDisplay key={activePlace}
+                                            cityName={PLACES_TR[activePlace].name}
+                                            countryCode={PLACES_TR[activePlace].country}
+                            />
                         </Col>
                     </Row>
                 </Grid>
