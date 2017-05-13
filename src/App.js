@@ -7,13 +7,17 @@ import "bootswatch/simplex/bootstrap.css";
 
 import {Col, Grid, Nav, Navbar, NavItem, Row} from "react-bootstrap";
 
-const PLACES_TR = [
+const CITIES = [
+    {
+        name: "Istanbul",
+        country: "tr"
+    },
     {
         name: "Ankara",
         country: "tr"
     },
     {
-        name: "Istanbul",
+        name: "Izmir",
         country: "tr"
     },
     {
@@ -21,12 +25,16 @@ const PLACES_TR = [
         country: "tr"
     },
     {
-        name: "Mersin",
+        name: "Duzce",
         country: "tr"
     },
     {
-        name: "Duzce",
-        country: "tr"
+        name: "London",
+        country: "uk"
+    },
+    {
+        name: "New York",
+        country: "us"
     },
 ];
 
@@ -41,7 +49,8 @@ class WeatherDisplay extends Component {
 
     componentDidMount() {
         let buildURLWithNameAndCountryCode = function (city, countryCode) {
-            return "http://api.openweathermap.org/data/2.5/weather?q="
+            let apiURL = "http://api.openweathermap.org/data/2.5";
+            return apiURL + "/weather?q="
                 + city
                 + ","
                 + countryCode
@@ -63,7 +72,8 @@ class WeatherDisplay extends Component {
         if (!weatherData)
             return <div>Loading</div>;
         const weather = weatherData.weather[0];
-        const iconUrl = "http://openweathermap.org/img/w/" + weather.icon + ".png";
+        let imageURL = "http://openweathermap.org/img";
+        const iconUrl = imageURL + "/w/" + weather.icon + ".png";
         return (
             <div>
                 <h1>
@@ -112,7 +122,7 @@ class App extends Component {
                                 }}
                             >
                                 {
-                                    PLACES_TR.map((place, index) => (
+                                    CITIES.map((place, index) => (
                                         <NavItem key={index} eventKey={index}>{place.name}</NavItem>
                                     ))
                                 }
@@ -120,8 +130,8 @@ class App extends Component {
                         </Col>
                         <Col md={8} sm={8}>
                             <WeatherDisplay key={activePlace}
-                                            cityName={PLACES_TR[activePlace].name}
-                                            countryCode={PLACES_TR[activePlace].country}
+                                            cityName={CITIES[activePlace].name}
+                                            countryCode={CITIES[activePlace].country}
                             />
                         </Col>
                     </Row>
